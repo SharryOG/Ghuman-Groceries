@@ -60,6 +60,16 @@ export interface RestockItem {
   createdAt: Date;
 }
 
+export interface Payment {
+  id: string;
+  amount: number;
+  description: string;
+  upiId?: string;
+  recipientName?: string;
+  status: 'pending' | 'completed' | 'failed';
+  date: Date;
+}
+
 export interface DailySummary {
   date: string;
   totalSales: number;
@@ -68,7 +78,7 @@ export interface DailySummary {
   transactionCount: number;
 }
 
-export type TabType = 'home' | 'analytics' | 'inventory' | 'sales' | 'creditors';
+export type TabType = 'home' | 'analytics' | 'inventory' | 'sales' | 'creditors' | 'payments';
 
 export interface QuantityConversion {
   name: string;

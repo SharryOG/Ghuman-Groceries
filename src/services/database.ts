@@ -1,5 +1,5 @@
 import initSqlJs from 'sql.js';
-import { Product, Sale, Creditor, Expense, RestockItem } from '../types';
+import { Product, Sale, Creditor, Expense, RestockItem, Payment } from '../types';
 
 class SQLiteDatabase {
   private db: any = null;
@@ -100,6 +100,17 @@ class SQLiteDatabase {
         is_custom INTEGER NOT NULL DEFAULT 0,
         priority TEXT NOT NULL CHECK (priority IN ('low', 'medium', 'high')),
         created_at TEXT NOT NULL
+      )`,
+
+      // Payments table
+      `CREATE TABLE IF NOT EXISTS payments (
+        id TEXT PRIMARY KEY,
+        amount REAL NOT NULL,
+        description TEXT NOT NULL,
+        upi_id TEXT,
+        recipient_name TEXT,
+        status TEXT NOT NULL CHECK (status IN ('pending', 'completed', 'failed')) DEFAULT 'pending',
+        date TEXT NOT NULL
       )`
     ];
 
@@ -569,6 +580,91 @@ class SQLiteDatabase {
     return this.getRestockItems();
   }
 
+  // Payments
+  getPayments(): Payment[] {
+    if (!this.initialized) return [];
+    
+    const stmt = this.db.prepare('SELECT * FROM payments ORDER BY date DESC');
+    const payments = [];
+    
+    while (stmt.step()) {
+      const row = stmt.getAsObject();
+      payments.push({
+        id: row.id,
+        amount: row.amount,
+        description: row.description,
+        upiId: row.upi_id || undefined,
+        recipientName: row.recipient_name || undefined,
+        status: row.status,
+        date: new Date(row.date)
+      });
+    }
+    
+    stmt.free();
+    return payments;
+  }
+
+  addPayment(payment: Omit<Payment, 'id'>): Payment {
+    const id = Date.now().toString();
+    
+    this.db.run(
+      `INSERT INTO payments (id, amount, description, upi_id, recipient_name, status, date)
+       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [id, payment.amount, payment.description, payment.upiId || null, 
+       payment.recipientName || null, payment.status, payment.date.toISOString()]
+    );
+    
+    this.saveToStorage();
+    
+    return {
+      ...payment,
+      id
+    };
+  }
+
+  updatePayment(id: string, updates: Partial<Payment>): Payment | null {
+    const existing = this.db.prepare('SELECT * FROM payments WHERE id = ?').get([id]);
+    if (!existing) return null;
+
+    const fields = [];
+    const values = [];
+
+    Object.entries(updates).forEach(([key, value]) => {
+      if (key === 'id') return;
+      
+      const dbKey = key === 'upiId' ? 'upi_id' : 
+                   key === 'recipientName' ? 'recipient_name' : key;
+      
+      fields.push(`${dbKey} = ?`);
+      if (key === 'date') {
+        values.push(new Date(value).toISOString());
+      } else {
+        values.push(value);
+      }
+    });
+
+    if (fields.length > 0) {
+      values.push(id);
+      this.db.run(
+        `UPDATE payments SET ${fields.join(', ')} WHERE id = ?`,
+        values
+      );
+    }
+
+    this.saveToStorage();
+    
+    const updated = this.db.prepare('SELECT * FROM payments WHERE id = ?').get([id]);
+    return {
+      id: updated.id,
+      amount: updated.amount,
+      description: updated.description,
+      upiId: updated.upi_id || undefined,
+      recipientName: updated.recipient_name || undefined,
+      status: updated.status,
+      date: new Date(updated.date)
+    };
+  }
+
   // Backup and Restore
   exportData(): string {
     if (!this.db) return '{}';
@@ -578,7 +674,8 @@ class SQLiteDatabase {
       sales: this.getSales(),
       creditors: this.getCreditors(),
       expenses: this.getExpenses(),
-      restockItems: this.getRestockItems()
+      restockItems: this.getRestockItems(),
+      payments: this.getPayments()
     };
     
     return JSON.stringify(data, null, 2);
@@ -589,6 +686,7 @@ class SQLiteDatabase {
       const data = JSON.parse(jsonData);
       
       // Clear existing data
+      this.db.run('DELETE FROM payments');
       this.db.run('DELETE FROM restock_items');
       this.db.run('DELETE FROM expenses');
       this.db.run('DELETE FROM sale_items');

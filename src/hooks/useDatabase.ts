@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../services/database';
-import { Product, Sale, Creditor, Expense, RestockItem } from '../types';
+import { Product, Sale, Creditor, Expense, RestockItem, Payment } from '../types';
 
 export const useProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -194,5 +194,43 @@ export const useRestockItems = () => {
     clearRestockList,
     generateLowStockItems,
     refreshRestockItems: loadRestockItems
+  };
+};
+
+export const usePayments = () => {
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadPayments();
+  }, []);
+
+  const loadPayments = () => {
+    setLoading(true);
+    const data = db.getPayments();
+    setPayments(data);
+    setLoading(false);
+  };
+
+  const addPayment = (payment: Omit<Payment, 'id'>) => {
+    const newPayment = db.addPayment(payment);
+    setPayments(prev => [...prev, newPayment]);
+    return newPayment;
+  };
+
+  const updatePayment = (id: string, updates: Partial<Payment>) => {
+    const updated = db.updatePayment(id, updates);
+    if (updated) {
+      setPayments(prev => prev.map(p => p.id === id ? updated : p));
+    }
+    return updated;
+  };
+
+  return {
+    payments,
+    loading,
+    addPayment,
+    updatePayment,
+    refreshPayments: loadPayments
   };
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useProducts, useSales, useCreditors, useRestockItems } from '../../hooks/useDatabase';
+import { useProducts, useSales, useCreditors, useRestockItems, usePayments } from '../../hooks/useDatabase';
 import { formatCurrency } from '../../utils/calculations';
 import { 
   TrendingUp, 
@@ -9,7 +9,9 @@ import {
   IndianRupee,
   ShoppingCart,
   Calendar,
-  Star
+  Star,
+  CreditCard,
+  QrCode
 } from 'lucide-react';
 
 const HomePage: React.FC = () => {
@@ -17,6 +19,7 @@ const HomePage: React.FC = () => {
   const { sales } = useSales();
   const { creditors } = useCreditors();
   const { restockItems } = useRestockItems();
+  const { payments } = usePayments();
 
   // Calculate dashboard metrics
   const totalProducts = products.length;
@@ -26,6 +29,9 @@ const HomePage: React.FC = () => {
   const todaySales = sales.filter(sale => 
     new Date(sale.date).toDateString() === new Date().toDateString()
   ).reduce((sum, sale) => sum + sale.total, 0);
+  const todayPayments = payments.filter(payment => 
+    new Date(payment.date).toDateString() === new Date().toDateString()
+  ).reduce((sum, payment) => sum + payment.amount, 0);
 
   // Most sold item
   const itemSales = sales.flatMap(sale => sale.items);
@@ -82,6 +88,20 @@ const HomePage: React.FC = () => {
       icon: ShoppingCart,
       color: 'bg-yellow-500',
       textColor: 'text-yellow-600'
+    },
+    {
+      name: 'Today\'s Payments',
+      value: formatCurrency(todayPayments),
+      icon: CreditCard,
+      color: 'bg-teal-500',
+      textColor: 'text-teal-600'
+    },
+    {
+      name: 'Total Payments',
+      value: payments.length,
+      icon: QrCode,
+      color: 'bg-indigo-500',
+      textColor: 'text-indigo-600'
     }
   ];
 
@@ -94,7 +114,7 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
@@ -171,7 +191,7 @@ const HomePage: React.FC = () => {
       {/* Quick Actions */}
       <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
         <h3 className="text-lg font-semibold mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <button className="flex items-center space-x-2 p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
             <Package className="h-5 w-5 text-blue-600" />
             <span className="text-blue-600 font-medium">Add Product</span>
@@ -187,6 +207,10 @@ const HomePage: React.FC = () => {
           <button className="flex items-center space-x-2 p-4 bg-orange-50 rounded-lg hover:bg-orange-100 transition-colors">
             <Users className="h-5 w-5 text-orange-600" />
             <span className="text-orange-600 font-medium">Manage Creditors</span>
+          </button>
+          <button className="flex items-center space-x-2 p-4 bg-teal-50 rounded-lg hover:bg-teal-100 transition-colors">
+            <CreditCard className="h-5 w-5 text-teal-600" />
+            <span className="text-teal-600 font-medium">Generate QR</span>
           </button>
         </div>
       </div>

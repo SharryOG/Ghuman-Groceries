@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { TabType } from '../../types';
-import { Home, BarChart3, Package, ShoppingCart, Users } from 'lucide-react';
+import { Home, BarChart3, Package, ShoppingCart, Users, CreditCard } from 'lucide-react';
 import HomePage from '../HomePage/HomePage';
 import AnalyticsTab from '../Analytics/AnalyticsTab';
 import InventoryTab from '../Inventory/InventoryTab';
 import SalesTab from '../Sales/SalesTab';
 import CreditorsTab from '../Creditors/CreditorsTab';
+import PaymentsTab from '../Payments/PaymentsTab';
 
 const MainLayout: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
@@ -15,7 +16,8 @@ const MainLayout: React.FC = () => {
     { id: 'analytics' as TabType, label: 'Analytics', icon: BarChart3 },
     { id: 'inventory' as TabType, label: 'Inventory', icon: Package },
     { id: 'sales' as TabType, label: 'Sales', icon: ShoppingCart },
-    { id: 'creditors' as TabType, label: 'Creditors', icon: Users }
+    { id: 'creditors' as TabType, label: 'Creditors', icon: Users },
+    { id: 'payments' as TabType, label: 'Payments', icon: CreditCard }
   ];
 
   const renderContent = () => {
@@ -30,6 +32,8 @@ const MainLayout: React.FC = () => {
         return <SalesTab />;
       case 'creditors':
         return <CreditorsTab />;
+      case 'payments':
+        return <PaymentsTab />;
       default:
         return <HomePage />;
     }
@@ -86,14 +90,14 @@ const MainLayout: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
               {/* Horizontal Tab Navigation for Home */}
               <div className="mb-8">
-                <nav className="flex space-x-8 bg-white rounded-lg shadow-sm p-2">
+                <nav className="flex space-x-8 bg-white rounded-lg shadow-sm p-2 overflow-x-auto">
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
                       <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id)}
-                        className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
+                        className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors whitespace-nowrap ${
                           activeTab === tab.id
                             ? 'bg-blue-600 text-white'
                             : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
