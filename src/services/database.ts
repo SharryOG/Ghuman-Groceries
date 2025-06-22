@@ -1,5 +1,5 @@
 import initSqlJs from 'sql.js';
-import { Product, Sale, Creditor, Expense, RestockItem, Payment } from '../types';
+import { Product, Sale, Creditor, Expense, RestockItem, Payment, BackupData } from '../types';
 
 class SQLiteDatabase {
   private db: any = null;
@@ -693,7 +693,9 @@ class SQLiteDatabase {
   exportData(): string {
     if (!this.db) return '{}';
     
-    const data = {
+    const data: BackupData = {
+      version: '1.0.0',
+      timestamp: new Date().toISOString(),
       products: this.getProducts(),
       sales: this.getSales(),
       creditors: this.getCreditors(),
@@ -707,7 +709,12 @@ class SQLiteDatabase {
 
   async importData(jsonData: string): Promise<boolean> {
     try {
-      const data = JSON.parse(jsonData);
+      const data: BackupData = JSON.parse(jsonData);
+      
+      // Validate backup data structure
+      if (!data.version || !data.timestamp) {
+        throw new Error('Invalid backup file format');
+      }
       
       // Clear existing data
       this.db.run('DELETE FROM payments');
@@ -718,15 +725,87 @@ class SQLiteDatabase {
       this.db.run('DELETE FROM creditors');
       this.db.run('DELETE FROM products');
       
-      // Import data
+      // Import products
       if (data.products) {
-        data.products.forEach((product: any) => {
+        data.products.forEach((product: Product) => {
           this.db.run(
             `INSERT INTO products (id, name, image, sale_price, purchase_price, type, quantity, min_quantity, created_at, updated_at)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
             [product.id, product.name, product.image || null, product.salePrice, 
              product.purchasePrice || null, product.type, product.quantity, 
-             product.minQuantity, product.createdAt, product.updatedAt]
+             product.minQuantity, product.createdAt.toISOString(), product.updatedAt.toISOString()]
+          );
+        });
+      }
+      
+      // Import sales
+      if (data.sales) {
+        data.sales.forEach((sale: Sale) => {
+          this.db.run(
+            `INSERT INTO sales (id, total, buyer_name, payment_type, date, is_paid)
+             VALUES (?, ?, ?, ?, ?, ?)`,
+            [sale.id, sale.total, sale.buyerName || null, sale.paymentType, 
+             sale.date.toISOString(), sale.isPaid ? 1 : 0]
+          );
+          
+          // Import sale items
+          sale.items.forEach((item, index) => {
+            const itemId = `${sale.id}_${index}`;
+            this.db.run(
+              `INSERT INTO sale_items (id, sale_id, product_id, product_name, quantity, price_per_unit, total, type)
+               VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+              [itemId, sale.id, item.productId, item.productName, item.quantity, 
+               item.pricePerUnit, item.total, item.type]
+            );
+          });
+        });
+      }
+      
+      // Import creditors
+      if (data.creditors) {
+        data.creditors.forEach((creditor: Creditor) => {
+          this.db.run(
+            `INSERT INTO creditors (id, name, total_debt, created_at, updated_at)
+             VALUES (?, ?, ?, ?, ?)`,
+            [creditor.id, creditor.name, creditor.totalDebt, 
+             creditor.createdAt.toISOString(), creditor.updatedAt.toISOString()]
+          );
+        });
+      }
+      
+      // Import expenses
+      if (data.expenses) {
+        data.expenses.forEach((expense: Expense) => {
+          this.db.run(
+            `INSERT INTO expenses (id, category, amount, description, is_paid, paid_amount, date, due_date)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+            [expense.id, expense.category, expense.amount, expense.description, 
+             expense.isPaid ? 1 : 0, expense.paidAmount, expense.date.toISOString(),
+             expense.dueDate ? expense.dueDate.toISOString() : null]
+          );
+        });
+      }
+      
+      // Import restock items
+      if (data.restockItems) {
+        data.restockItems.forEach((item: RestockItem) => {
+          this.db.run(
+            `INSERT INTO restock_items (id, product_id, product_name, quantity, is_custom, priority, created_at)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [item.id, item.productId || null, item.productName, item.quantity, 
+             item.isCustom ? 1 : 0, item.priority, item.createdAt.toISOString()]
+          );
+        });
+      }
+      
+      // Import payments
+      if (data.payments) {
+        data.payments.forEach((payment: Payment) => {
+          this.db.run(
+            `INSERT INTO payments (id, amount, description, upi_id, recipient_name, status, date)
+             VALUES (?, ?, ?, ?, ?, ?, ?)`,
+            [payment.id, payment.amount, payment.description, payment.upiId || null, 
+             payment.recipientName || null, payment.status, payment.date.toISOString()]
           );
         });
       }

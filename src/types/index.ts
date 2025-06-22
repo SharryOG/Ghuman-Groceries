@@ -78,10 +78,21 @@ export interface DailySummary {
   transactionCount: number;
 }
 
-export type TabType = 'home' | 'analytics' | 'inventory' | 'sales' | 'creditors' | 'payments';
+export type TabType = 'home' | 'payments' | 'pricing' | 'analytics' | 'inventory' | 'sales' | 'creditors' | 'settings';
 
 export interface QuantityConversion {
   name: string;
   grams: number;
   displayName: string;
+}
+
+export interface BackupData {
+  version: string;
+  timestamp: string;
+  products: Product[];
+  sales: Sale[];
+  creditors: Creditor[];
+  expenses: Expense[];
+  restockItems: RestockItem[];
+  payments: Payment[];
 }

@@ -1,29 +1,37 @@
 import React, { useState } from 'react';
 import { TabType } from '../../types';
-import { Home, BarChart3, Package, ShoppingCart, Users, CreditCard } from 'lucide-react';
+import { Home, BarChart3, Package, ShoppingCart, Users, CreditCard, DollarSign, Settings } from 'lucide-react';
 import HomePage from '../HomePage/HomePage';
 import AnalyticsTab from '../Analytics/AnalyticsTab';
 import InventoryTab from '../Inventory/InventoryTab';
 import SalesTab from '../Sales/SalesTab';
 import CreditorsTab from '../Creditors/CreditorsTab';
 import PaymentsTab from '../Payments/PaymentsTab';
+import PricingTab from '../Pricing/PricingTab';
+import SettingsTab from '../Settings/SettingsTab';
 
 const MainLayout: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('home');
 
   const tabs = [
     { id: 'home' as TabType, label: 'Home', icon: Home },
+    { id: 'payments' as TabType, label: 'Payments', icon: CreditCard },
+    { id: 'pricing' as TabType, label: 'Pricing', icon: DollarSign },
     { id: 'analytics' as TabType, label: 'Analytics', icon: BarChart3 },
     { id: 'inventory' as TabType, label: 'Inventory', icon: Package },
     { id: 'sales' as TabType, label: 'Sales', icon: ShoppingCart },
     { id: 'creditors' as TabType, label: 'Creditors', icon: Users },
-    { id: 'payments' as TabType, label: 'Payments', icon: CreditCard }
+    { id: 'settings' as TabType, label: 'Settings', icon: Settings }
   ];
 
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
         return <HomePage />;
+      case 'payments':
+        return <PaymentsTab />;
+      case 'pricing':
+        return <PricingTab />;
       case 'analytics':
         return <AnalyticsTab />;
       case 'inventory':
@@ -32,8 +40,8 @@ const MainLayout: React.FC = () => {
         return <SalesTab />;
       case 'creditors':
         return <CreditorsTab />;
-      case 'payments':
-        return <PaymentsTab />;
+      case 'settings':
+        return <SettingsTab />;
       default:
         return <HomePage />;
     }
