@@ -18,6 +18,8 @@ class SQLiteDatabase {
       if (savedDb) {
         const uint8Array = new Uint8Array(JSON.parse(savedDb));
         this.db = new SQL.Database(uint8Array);
+        // Run migrations for existing database
+        await this.runMigrations();
       } else {
         this.db = new SQL.Database();
         await this.createTables();
@@ -29,6 +31,28 @@ class SQLiteDatabase {
       console.error('Failed to initialize SQLite database:', error);
       throw error;
     }
+  }
+
+  private async runMigrations() {
+    // Check if payments table exists, if not create it
+    try {
+      this.db.prepare('SELECT 1 FROM payments LIMIT 1').step();
+    } catch (error) {
+      // Table doesn't exist, create it
+      console.log('Creating missing payments table...');
+      this.db.run(`CREATE TABLE IF NOT EXISTS payments (
+        id TEXT PRIMARY KEY,
+        amount REAL NOT NULL,
+        description TEXT NOT NULL,
+        upi_id TEXT,
+        recipient_name TEXT,
+        status TEXT NOT NULL CHECK (status IN ('pending', 'completed', 'failed')) DEFAULT 'pending',
+        date TEXT NOT NULL
+      )`);
+      this.saveToStorage();
+    }
+
+    // Add any other missing tables or columns here in the future
   }
 
   private async createTables() {
