@@ -162,8 +162,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
     <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 sm:p-8 text-white">
-        <h2 className="text-2xl sm:text-3xl font-bold mb-2">Welcome to Ghuman Groceries</h2>
-        <p className="text-blue-100 text-sm sm:text-base">Comprehensive store management at your fingertips</p>
+        <h2 className="text-2xl sm:text-3xl font-bold">Welcome to Ghuman Groceries</h2>
       </div>
 
       {/* Stats Grid */}
@@ -174,11 +173,11 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
             <div 
               key={stat.name} 
               onClick={stat.action}
-              className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700 cursor-pointer hover:shadow-md transition-all duration-200"
+              className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-slate-700 cursor-pointer hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-center justify-between">
                 <div className="min-w-0 flex-1">
-                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-1 truncate">{stat.name}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mb-1 truncate">{stat.name}</p>
                   <p className={`text-lg sm:text-2xl font-bold ${stat.textColor} dark:${stat.textColor.replace('text-', 'text-')} truncate`}>
                     {stat.value}
                   </p>
@@ -195,7 +194,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       {/* Quick Insights */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Most Sold Product */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-slate-700">
           <div className="flex items-center space-x-3 mb-4">
             <Star className="h-5 w-5 text-yellow-500" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Most Sold Product</h3>
@@ -203,32 +202,32 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
           {mostSoldProduct ? (
             <div className="space-y-2">
               <p className="text-xl font-bold text-gray-900 dark:text-white">{mostSoldProduct.name}</p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-slate-400">
                 Sold: {productSales[mostSoldProduct.id] || 0} {mostSoldProduct.type}
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-sm text-gray-600 dark:text-slate-400">
                 Price: {formatCurrency(mostSoldProduct.salePrice)}
               </p>
             </div>
           ) : (
-            <p className="text-gray-500 dark:text-gray-400">No sales data available</p>
+            <p className="text-gray-500 dark:text-slate-400">No sales data available</p>
           )}
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+        <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-slate-700">
           <div className="flex items-center space-x-3 mb-4">
             <Calendar className="h-5 w-5 text-blue-500" />
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Recent Activity</h3>
           </div>
           <div className="space-y-3">
             {sales.slice(-3).reverse().map((sale) => (
-              <div key={sale.id} className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-gray-700 last:border-b-0">
+              <div key={sale.id} className="flex justify-between items-center py-2 border-b border-gray-100 dark:border-slate-700 last:border-b-0">
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
                     {sale.buyerName || 'Cash Sale'}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-xs text-gray-500 dark:text-slate-400">
                     {new Date(sale.date).toLocaleDateString()}
                   </p>
                 </div>
@@ -241,14 +240,14 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
               </div>
             ))}
             {sales.length === 0 && (
-              <p className="text-gray-500 dark:text-gray-400 text-sm">No recent sales</p>
+              <p className="text-gray-500 dark:text-slate-400 text-sm">No recent sales</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+      <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200 dark:border-slate-700">
         <h3 className="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Quick Actions</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
           {quickActions.map((action) => {
