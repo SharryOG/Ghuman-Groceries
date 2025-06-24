@@ -71,16 +71,16 @@ const MainLayout: React.FC = () => {
   const isHome = activeTab === 'home';
 
   return (
-    <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-gray-900' : 'bg-gray-50'}`}>
+    <div className={`min-h-screen transition-colors duration-200 ${darkMode ? 'dark bg-slate-900' : 'bg-gray-50'}`}>
       {/* Header */}
-      <header className={`shadow-sm border-b transition-colors duration-200 ${darkMode ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+      <header className={`shadow-sm border-b transition-colors duration-200 ${darkMode ? 'bg-slate-800 border-slate-700' : 'bg-white border-gray-200'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-4">
               {!isHome && (
                 <button
                   onClick={() => setSidebarOpen(!sidebarOpen)}
-                  className={`p-2 rounded-lg lg:hidden transition-colors ${darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                  className={`p-2 rounded-lg lg:hidden transition-colors ${darkMode ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'}`}
                 >
                   {sidebarOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
                 </button>
@@ -95,11 +95,11 @@ const MainLayout: React.FC = () => {
             <div className="flex items-center space-x-4">
               <button
                 onClick={toggleDarkMode}
-                className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-600 hover:bg-gray-100'}`}
+                className={`p-2 rounded-lg transition-colors ${darkMode ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-600 hover:bg-gray-100'}`}
               >
                 {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
               </button>
-              <div className={`text-sm hidden sm:block transition-colors ${darkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+              <div className={`text-sm hidden sm:block transition-colors ${darkMode ? 'text-slate-300' : 'text-gray-600'}`}>
                 {new Date().toLocaleDateString('en-IN', { 
                   weekday: 'long', 
                   year: 'numeric', 
@@ -127,7 +127,7 @@ const MainLayout: React.FC = () => {
             {/* Sidebar */}
             <nav className={`fixed lg:relative inset-y-0 left-0 z-50 w-64 transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
               sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-            } ${darkMode ? 'bg-gray-800 shadow-xl' : 'bg-white shadow-lg'} mt-16 lg:mt-0`}>
+            } ${darkMode ? 'bg-slate-800 shadow-xl' : 'bg-white shadow-lg'} mt-16 lg:mt-0`}>
               <div className="p-4">
                 <button
                   onClick={() => {
@@ -135,14 +135,14 @@ const MainLayout: React.FC = () => {
                     setSidebarOpen(false);
                   }}
                   className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
-                    darkMode ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
+                    darkMode ? 'text-slate-300 hover:bg-slate-700' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                 >
                   <Home className="h-5 w-5" />
                   <span>Back to Home</span>
                 </button>
               </div>
-              <div className={`border-t ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <div className={`border-t ${darkMode ? 'border-slate-700' : 'border-gray-200'}`}>
                 <div className="p-4 space-y-2">
                   {tabs.filter(tab => tab.id !== 'home').map((tab) => {
                     const Icon = tab.icon;
@@ -157,7 +157,7 @@ const MainLayout: React.FC = () => {
                           activeTab === tab.id
                             ? 'bg-blue-600 text-white'
                             : darkMode 
-                            ? 'text-gray-300 hover:bg-gray-700' 
+                            ? 'text-slate-300 hover:bg-slate-700' 
                             : 'text-gray-700 hover:bg-gray-100'
                         }`}
                       >
@@ -178,7 +178,7 @@ const MainLayout: React.FC = () => {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-8">
               {/* Horizontal Tab Navigation for Home */}
               <div className="mb-6 sm:mb-8">
-                <nav className={`flex space-x-2 sm:space-x-8 rounded-lg shadow-sm p-2 overflow-x-auto ${darkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                <nav className={`flex space-x-2 sm:space-x-8 rounded-lg shadow-sm p-2 overflow-x-auto ${darkMode ? 'bg-slate-800' : 'bg-white'}`}>
                   {tabs.map((tab) => {
                     const Icon = tab.icon;
                     return (
@@ -189,7 +189,7 @@ const MainLayout: React.FC = () => {
                           activeTab === tab.id
                             ? 'bg-blue-600 text-white'
                             : darkMode
-                            ? 'text-gray-300 hover:text-white hover:bg-gray-700'
+                            ? 'text-slate-300 hover:text-white hover:bg-slate-700'
                             : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
                         }`}
                       >
