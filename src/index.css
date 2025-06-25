@@ -11,6 +11,11 @@
   body {
     @apply transition-colors duration-200;
   }
+  
+  /* Ensure dark mode works properly */
+  .dark {
+    color-scheme: dark;
+  }
 }
 
 /* Custom scrollbar */
@@ -35,6 +40,19 @@
   
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
     background-color: rgb(107 114 128);
+  }
+  
+  /* Dark mode scrollbar */
+  .dark .scrollbar-thin {
+    scrollbar-color: rgb(71 85 105) transparent;
+  }
+  
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: rgb(71 85 105);
+  }
+  
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(51 65 85);
   }
 }
 
@@ -65,13 +83,13 @@
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible {
-    @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-slate-800;
   }
-  
-  .dark button:focus-visible,
-  .dark input:focus-visible,
-  .dark select:focus-visible,
-  .dark textarea:focus-visible {
-    @apply ring-offset-gray-800;
-  }
+}
+
+/* Smooth transitions for dark mode */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
 }

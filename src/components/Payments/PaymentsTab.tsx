@@ -33,12 +33,12 @@ const PaymentsTab: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Payment Management</h1>
-          <div className="flex flex-wrap gap-4 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Payment Management</h1>
+          <div className="flex flex-wrap gap-4 text-sm text-gray-600 dark:text-slate-400">
             <div className="flex items-center space-x-2">
               <CreditCard className="h-4 w-4" />
               <span>{todayPayments.length} Payments Today</span>
@@ -56,40 +56,40 @@ const PaymentsTab: React.FC = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Today's Payments</p>
-                <p className="text-2xl font-bold text-green-600">{formatCurrency(totalToday)}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Today's Payments</p>
+                <p className="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{formatCurrency(totalToday)}</p>
               </div>
-              <CreditCard className="h-8 w-8 text-green-600" />
+              <CreditCard className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Total Payments</p>
-                <p className="text-2xl font-bold text-blue-600">{formatCurrency(totalAll)}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Total Payments</p>
+                <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">{formatCurrency(totalAll)}</p>
               </div>
-              <IndianRupee className="h-8 w-8 text-blue-600" />
+              <IndianRupee className="h-8 w-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
           
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+          <div className="bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Payment Count</p>
-                <p className="text-2xl font-bold text-purple-600">{payments.length}</p>
+                <p className="text-sm text-gray-600 dark:text-slate-400">Payment Count</p>
+                <p className="text-2xl font-bold text-violet-600 dark:text-violet-400">{payments.length}</p>
               </div>
-              <QrCode className="h-8 w-8 text-purple-600" />
+              <QrCode className="h-8 w-8 text-violet-600 dark:text-violet-400" />
             </div>
           </div>
         </div>
 
         {/* Navigation */}
         <div className="mb-8">
-          <nav className="flex space-x-8 bg-white rounded-lg shadow-sm p-2">
+          <nav className="flex space-x-8 bg-white dark:bg-slate-800 rounded-lg shadow-sm p-2 border border-gray-200 dark:border-slate-700">
             {views.map((view) => {
               const Icon = view.icon;
               return (
@@ -98,8 +98,8 @@ const PaymentsTab: React.FC = () => {
                   onClick={() => setActiveView(view.id)}
                   className={`flex items-center space-x-2 px-6 py-3 rounded-lg font-medium transition-colors ${
                     activeView === view.id
-                      ? 'bg-green-600 text-white'
-                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                      ? 'bg-emerald-600 text-white'
+                      : 'text-gray-600 dark:text-slate-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-slate-700'
                   }`}
                 >
                   <Icon className="h-5 w-5" />
@@ -107,8 +107,8 @@ const PaymentsTab: React.FC = () => {
                   {view.count !== null && (
                     <span className={`px-2 py-1 rounded-full text-xs ${
                       activeView === view.id
-                        ? 'bg-green-500 text-white'
-                        : 'bg-gray-200 text-gray-600'
+                        ? 'bg-emerald-500 text-white'
+                        : 'bg-gray-200 dark:bg-slate-600 text-gray-600 dark:text-slate-300'
                     }`}>
                       {view.count}
                     </span>

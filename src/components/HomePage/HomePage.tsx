@@ -59,23 +59,23 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       value: totalProducts,
       icon: Package,
       color: 'bg-blue-500',
-      textColor: 'text-blue-600',
+      textColor: 'text-blue-600 dark:text-blue-400',
       action: () => onTabChange('inventory')
     },
     {
       name: 'Today\'s Sales',
       value: formatCurrency(todaySales),
       icon: IndianRupee,
-      color: 'bg-green-500',
-      textColor: 'text-green-600',
+      color: 'bg-emerald-500',
+      textColor: 'text-emerald-600 dark:text-emerald-400',
       action: () => onTabChange('sales')
     },
     {
       name: 'Total Sales',
       value: formatCurrency(totalSales),
       icon: TrendingUp,
-      color: 'bg-purple-500',
-      textColor: 'text-purple-600',
+      color: 'bg-violet-500',
+      textColor: 'text-violet-600 dark:text-violet-400',
       action: () => onTabChange('analytics')
     },
     {
@@ -83,7 +83,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       value: formatCurrency(totalDebt),
       icon: Users,
       color: 'bg-orange-500',
-      textColor: 'text-orange-600',
+      textColor: 'text-orange-600 dark:text-orange-400',
       action: () => onTabChange('creditors')
     },
     {
@@ -91,7 +91,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       value: lowStockItems,
       icon: AlertTriangle,
       color: 'bg-red-500',
-      textColor: 'text-red-600',
+      textColor: 'text-red-600 dark:text-red-400',
       action: () => onTabChange('inventory')
     },
     {
@@ -99,7 +99,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       value: restockItems.length,
       icon: ShoppingCart,
       color: 'bg-yellow-500',
-      textColor: 'text-yellow-600',
+      textColor: 'text-yellow-600 dark:text-yellow-400',
       action: () => onTabChange('inventory')
     },
     {
@@ -107,7 +107,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       value: formatCurrency(todayPayments),
       icon: CreditCard,
       color: 'bg-teal-500',
-      textColor: 'text-teal-600',
+      textColor: 'text-teal-600 dark:text-teal-400',
       action: () => onTabChange('payments')
     },
     {
@@ -115,7 +115,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
       value: payments.length,
       icon: QrCode,
       color: 'bg-indigo-500',
-      textColor: 'text-indigo-600',
+      textColor: 'text-indigo-600 dark:text-indigo-400',
       action: () => onTabChange('payments')
     }
   ];
@@ -131,15 +131,15 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
     {
       label: 'New Sale',
       icon: ShoppingCart,
-      color: 'bg-green-50 hover:bg-green-100 dark:bg-green-900/20 dark:hover:bg-green-900/30',
-      textColor: 'text-green-600 dark:text-green-400',
+      color: 'bg-emerald-50 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:hover:bg-emerald-900/30',
+      textColor: 'text-emerald-600 dark:text-emerald-400',
       action: () => onTabChange('sales')
     },
     {
       label: 'View Analytics',
       icon: BarChart3,
-      color: 'bg-purple-50 hover:bg-purple-100 dark:bg-purple-900/20 dark:hover:bg-purple-900/30',
-      textColor: 'text-purple-600 dark:text-purple-400',
+      color: 'bg-violet-50 hover:bg-violet-100 dark:bg-violet-900/20 dark:hover:bg-violet-900/30',
+      textColor: 'text-violet-600 dark:text-violet-400',
       action: () => onTabChange('analytics')
     },
     {
@@ -161,7 +161,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 sm:p-8 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-violet-600 rounded-lg p-6 sm:p-8 text-white">
         <h2 className="text-2xl sm:text-3xl font-bold">Welcome to Ghuman Groceries</h2>
       </div>
 
@@ -178,7 +178,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
               <div className="flex items-center justify-between">
                 <div className="min-w-0 flex-1">
                   <p className="text-xs sm:text-sm text-gray-600 dark:text-slate-400 mb-1 truncate">{stat.name}</p>
-                  <p className={`text-lg sm:text-2xl font-bold ${stat.textColor} dark:${stat.textColor.replace('text-', 'text-')} truncate`}>
+                  <p className={`text-lg sm:text-2xl font-bold ${stat.textColor} truncate`}>
                     {stat.value}
                   </p>
                 </div>
@@ -233,7 +233,7 @@ const HomePage: React.FC<HomePageProps> = ({ onTabChange }) => {
                 </div>
                 <div className="text-right ml-4">
                   <p className="text-sm font-semibold text-gray-900 dark:text-white">{formatCurrency(sale.total)}</p>
-                  <p className={`text-xs ${sale.paymentType === 'credit' ? 'text-orange-600 dark:text-orange-400' : 'text-green-600 dark:text-green-400'}`}>
+                  <p className={`text-xs ${sale.paymentType === 'credit' ? 'text-orange-600 dark:text-orange-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
                     {sale.paymentType}
                   </p>
                 </div>
